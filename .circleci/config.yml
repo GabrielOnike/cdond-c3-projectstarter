@@ -132,7 +132,6 @@ jobs:
             cd backend
             npm install
             npm audit fix --audit-level=critical
-          # npm install oauth-sign@^0.9.0 // this should come before audit above if its to be added
 
   deploy-infrastructure:
     docker:
