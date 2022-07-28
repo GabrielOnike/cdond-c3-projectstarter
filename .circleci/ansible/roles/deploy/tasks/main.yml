@@ -1,4 +1,14 @@
 ---
+- name: "print working directory"
+  shell: |
+    pwd
+    ls -lh
+
+- name: "Copy artifact.tar.gz to EC2"
+  copy:
+    src: "project/artifact.tar.gz"
+    dest: "~/"
+
 - name: "extract artifact"
   shell: |
     tar xzf artifact.tar.gz
