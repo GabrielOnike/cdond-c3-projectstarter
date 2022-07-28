@@ -1,17 +1,28 @@
 ---
-- name: "print working directory"
-  shell: |
-    pwd
-    ls -lh
+# - name: "print working directory"
+#   shell: |
+#     pwd
+#     ls -lh
+- name: 'update and upgrade packages.'
+  become: yes
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400
 
-- name: "Copy artifact.tar.gz to EC2"
-  copy:
-    src: "project/artifact.tar.gz"
-    dest: "~/"
+- name: remove unneeded deps
+  become: yes
+  apt:
+    autoremove: yes
 
-- name: "extract artifact"
-  shell: |
-    tar xzf artifact.tar.gz
+# - name: "Copy artifact.tar.gz to EC2"
+#   copy:
+#     src: "project/artifact.tar.gz"
+#     dest: "~/"
+
+# - name: "extract artifact"
+#   shell: |
+#     tar xzf artifact.tar.gz
 
 - name: "install dependencies."
   become: yes
@@ -19,6 +30,12 @@
     name: ["nodejs", "npm"]
     state: latest
     update_cache: yes
+
+- name: extract artifact
+  become: yes
+  unarchive:
+    src: files/artifact.tar.gz
+    dest: .
 
 - name: "install pm2"
   become: yes
@@ -33,5 +50,7 @@
     pm2 stop default
 
 - name: Start pm2 
+  become: yes
   shell: |
+    pm2 delete all
     pm2 start npm -- start

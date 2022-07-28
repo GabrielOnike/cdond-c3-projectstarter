@@ -281,14 +281,14 @@ jobs:
       - add_ssh_keys:
               # You can get this ID in the section where you registered the SSH Key
               fingerprints: ["94:d4:18:ec:7a:7d:e7:71:38:b3:d6:42:eb:75:b7:10"]
-      - attach_workspace:
-              at: ~/
       - run:
           name: Install dependencies
           command: |
             apk add --update --no-cache tar gzip nodejs npm ansible curl aws-cli
       - restore_cache:
           keys: [backend-build]
+      - attach_workspace:
+          at: ~/          
       - run:
           name: Deploy backend
           command: |
@@ -306,7 +306,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/artifact.tar.gz 
+            - files/artifact.tar.gz 
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
@@ -384,8 +384,8 @@ workflows:
           requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
-      # - smoke-test:
-      #     requires: [deploy-backend, deploy-frontend]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
       # - cloudfront-update:
       #     requires: [smoke-test]
       # - cleanup:
