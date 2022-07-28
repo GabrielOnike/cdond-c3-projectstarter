@@ -20,9 +20,9 @@
 #     src: "project/artifact.tar.gz"
 #     dest: "~/"
 
-# - name: "extract artifact"
-#   shell: |
-#     tar xzf artifact.tar.gz
+- name: "extract artifact"
+  shell: |
+    tar xzf ~/artifact.tar.gz
 
 - name: "install dependencies."
   become: yes
@@ -31,11 +31,11 @@
     state: latest
     update_cache: yes
 
-- name: extract artifact
-  become: yes
-  unarchive:
-    src: files/artifact.tar.gz
-    dest: .
+# - name: extract artifact
+#   become: yes
+#   unarchive:
+#     src: files/artifact.tar.gz
+#     dest: .
 
 - name: "install pm2"
   become: yes
