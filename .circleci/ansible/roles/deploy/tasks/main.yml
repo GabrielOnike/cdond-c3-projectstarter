@@ -45,10 +45,6 @@
     production: yes
     state: present
 
-- name: Stop Default
-  shell: |
-    pm2 stop default
-
 - name: Start pm2 
   become: yes
   shell: |
