@@ -31,11 +31,11 @@
     state: latest
     update_cache: yes
 
-# - name: extract artifact
-#   become: yes
-#   unarchive:
-#     src: files/artifact.tar.gz
-#     dest: /home/ubuntu
+- name: extract artifact
+  become: yes
+  unarchive:
+    src: files/artifact.tar.gz
+    dest: /home/ubuntu
 
 - name: "install pm2"
   become: yes
