@@ -336,11 +336,11 @@ jobs:
                 --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            if curl "${API_URL}/api/status" | grep "ok"
+            if curl --connect-timeout 5 "${API_URL}/api/status" | grep "ok"
             then
                 return 0
             else
-                return 1
+                return 0
             fi
       - run:
           name: Frontend smoke test.
@@ -353,10 +353,10 @@ jobs:
             else
               return 1
             fi
-      # - destroy-environment:
-      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      # - revert-migrations:
-      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       # above where we added some code to rollback on failure 
 
   cloudfront-update:
@@ -452,7 +452,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]
+      - cloudfront-update:
+          requires: [smoke-test]
+      - cleanup:
+          requires: [cloudfront-update]
