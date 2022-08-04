@@ -1,5 +1,9 @@
 Description: >
-  Cloudfront distribution for UdaPeople.
+  Cloudfront distribution for UdaPeople.Create with 
+  ws cloudformation deploy \
+         --template-file cloudfront.yml \
+         --stack-name InitialStack\
+         --parameter-overrides WorkflowID=qwertyup
 
 Parameters:
   WorkflowID:
@@ -21,7 +25,7 @@ Resources:
       DistributionConfig:
         Origins:
           # - DomainName: !Sub "udapeople-qwertyup.s3.amazonaws.com"
-          - DomainName: !Sub "udapeople-${WorkflowID}.s3.amazonaws.com"          
+          - DomainName: !Sub 'udapeople-${WorkflowID}.s3.amazonaws.com'          
             Id: webpage
             S3OriginConfig:
               OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
